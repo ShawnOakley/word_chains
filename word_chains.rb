@@ -67,10 +67,22 @@ class WordChains
     possible_targets = compare_with_previous(possible_targets)
 
     until possible_targets.include?(end_word)
-
+      temp_words = possible_targets
+      current_words.each do |word|
+        individual_return = adjacent_words(word, dictionary).flatten
+        if word.is_a?(String)
+          compare_with_previous(individual_return).each do |found_word|
+            update_hash(found_word, word)
+          end
+        end
+        possible_targets << compare_with_previous(individual_return)
+      end
+      current_words = temp_words
+      (visited_words << current_words).flatten
+      possible_targets = compare_with_previous(possible_targets)
     end
+  chain_hash
   end
-
 end
 
 if __FILE__ == $0
